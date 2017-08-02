@@ -16,3 +16,10 @@ minetest.register_craft({
 	output = "dye:green 4",
 	recipe = {"default:cactus"},
 })
+
+-- Make keys be crafted by cooking gold.
+minetest.register_craft({
+	type = "cooking",
+	output = "default:skeleton_key",
+	recipe = "default:gold_ingot",
+})

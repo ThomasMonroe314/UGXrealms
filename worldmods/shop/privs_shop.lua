@@ -14,7 +14,7 @@ function shop.setform(pos)
 		default.gui_slots ..
 		"label[3.3,0;Privs Shop]" ..
 		"label[2,0.4;Fly]" ..
-		"label[5,0.4;Fast]" ..
+		"label[5,0.4;Noclip]" ..
 		"list[nodemeta:" ..spos.. ";fly;2,1;1,1;]" ..
 		"list[nodemeta:" ..spos.. ";fast;5,1;1,1;]" ..
 		"item_image[2,1;1,1;shop:coin]" ..
@@ -46,22 +46,22 @@ function shop.buy(pos, listname, index, stack, player)
 
 		local effectid_fly = playereffects.apply_effect_type("fly", time, player)
 
-	elseif listname == "fast" then
+	elseif listname == "noclip" then
 		local count = stack:get_count()
-		inv:remove_item("fast", stack)
+		inv:remove_item("noclip", stack)
 		local name = player:get_player_name()
 		local time = count / shop.price2
 
 		local q = playereffects.get_player_effects(name)
 		for i=1, #q do
-			if q[i].effect_type_id == "fast" then
+			if q[i].effect_type_id == "noclip" then
 				local countdown_fast = playereffects.get_remaining_effect_time(q[i].effect_id)
-				local effectid_fast = playereffects.apply_effect_type("fast", time + countdown_fast, player)
+				local effectid_fast = playereffects.apply_effect_type("niclip", time + countdown_fast, player)
 				return
 			end
 		end
 
-		local effectid_fast = playereffects.apply_effect_type("fast", time, player)
+		local effectid_fast = playereffects.apply_effect_type("noclip", time, player)
 	end
 end
 
@@ -99,7 +99,7 @@ minetest.register_node("shop:privs", {
 			else
 				return 0
 			end
-		elseif listname == "fast" then
+		elseif listname == "noclip" then
 			if s == "shop:coin" then
 				return -1
 			else
@@ -127,16 +127,16 @@ playereffects.register_effect_type("fly", "Fly mode available", nil, {"fly"},
 	false,
 	false)
 
-playereffects.register_effect_type("fast", "Fast mode available", nil, {"fast"},
+playereffects.register_effect_type("noclip", "Noclip mode available", nil, {"noclip"},
 	function(player)
 		local playername = player:get_player_name()
 		local privs = minetest.get_player_privs(playername)
-		privs.fast = true
+		privs.noclip = true
 		minetest.set_player_privs(playername, privs)
 	end,
 	function(effect, player)
 		local privs = minetest.get_player_privs(effect.playername)
-		privs.fast = nil
+		privs.noclip = nil
 		minetest.set_player_privs(effect.playername, privs)
 	end,
 	false,
